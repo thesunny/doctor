@@ -8,7 +8,7 @@
     "webdriverio": "^5.4.0"
   },
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --watch --verbose=false"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
