@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "debug": "^4.1.1",
     "jest": "^23.6.0",
+    "tiny-invariant": "^1.0.3",
     "webdriverio": "^5.4.0"
   },
   "scripts": {
@@ -12,6 +14,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0"
