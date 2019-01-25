@@ -20,17 +20,29 @@ const promisify = function(originalFn) {
   }
 }
 
-const it = function(text, fn) {
-  global.it(text, promisify(fn))
+function promisifyFnArgs(fn, index) {
+  if (fn.promisifiedFnArgs) return fn
+  const nextFn = function(...args) {
+    args[index] = promisify(args[index])
+    fn(...args)
+  }
+  nextFn.promisifiedFnArgs = true
+  return nextFn
 }
 
-const beforeAll = function(fn) {
-  global.beforeAll(promisify(fn))
-}
+// promisifyFunctions(global, {
+//   it: [1],
+//   beforeAll: [0],
+//   afterAll: [0],
+//   beforeEach: [0],
+//   afterEach: [0],
+// })
 
-const afterAll = function(fn) {
-  global.afterAll(promisify(fn))
-}
+global.it = promisifyFnArgs(global.it, 1)
+global.beforeAll = promisifyFnArgs(global.beforeAll, 0)
+global.afterAll = promisifyFnArgs(global.afterAll, 0)
+global.beforeEach = promisifyFnArgs(global.beforeEach, 0)
+global.afterEach = promisifyFnArgs(global.afterEach, 0)
 
 describe("Should pass tests", () => {
   let doctor
