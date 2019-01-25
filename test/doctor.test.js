@@ -1,29 +1,20 @@
-import Doctor from "../index"
-import Fiber from "fibers"
 import Debug from "debug"
+import Fiber from "fibers"
+import invariant from 'tiny-invariant'
+
+import Doctor from "../index"
+import WholeWheat from '../whole-wheat'
 
 const debug = Debug("doctor:test")
 Debug.enable("doctor:test")
 
-const promisify = function(originalFn) {
-  return function(...args) {
-    return new Promise(function(resolve, reject) {
-      Fiber(function() {
-        try {
-          const result = originalFn(...args)
-          resolve(result)
-        } catch (e) {
-          reject(e)
-        }
-      }).run()
-    })
-  }
-}
-
 function promisifyFnArgs(fn, index) {
   if (fn.promisifiedFnArgs) return fn
   const nextFn = function(...args) {
-    args[index] = promisify(args[index])
+    // modify the argument at the given position into a promise
+    const arg = args[index]
+    invariant(typeof arg === 'function', `Argument at position ${index} must be a function`) 
+    args[index] = WholeWheat.promisify(arg)
     fn(...args)
   }
   nextFn.promisifiedFnArgs = true
