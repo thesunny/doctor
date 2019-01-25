@@ -3,7 +3,7 @@ import Fiber from "fibers"
 import invariant from 'tiny-invariant'
 
 import Doctor from "../index"
-import WholeWheat from '../whole-wheat'
+import Wheaties from '../wheaties'
 
 const debug = Debug("doctor:test")
 Debug.enable("doctor:test")
@@ -14,7 +14,7 @@ function promisifyFnArgs(fn, index) {
     // modify the argument at the given position into a promise
     const arg = args[index]
     invariant(typeof arg === 'function', `Argument at position ${index} must be a function`) 
-    args[index] = WholeWheat.promisify(arg)
+    args[index] = Wheaties.promisify(arg)
     fn(...args)
   }
   nextFn.promisifiedFnArgs = true

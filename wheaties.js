@@ -1,12 +1,11 @@
 import Fiber from "fibers"
 
 const WholeWheat = {
-
   /**
    * Takes a function that we expect to run in a Fiber and adds the Fiber to
    * it. The method returns a Promise.
-   * 
-   * @param {Function} originalFn 
+   *
+   * @param {Function} originalFn
    */
 
   promisify(originalFn) {
@@ -44,6 +43,38 @@ const WholeWheat = {
         })
       return Fiber.yield()
     }
+  },
+
+  /**
+   * Takes a function that ends by calling a done(result) style callback and
+   * runs it in the current fiber.
+   * 
+   * @param {Function} fn 
+   */
+
+  doneToFiber(fn) {
+    const fiber = Fiber.current
+    fn(function (result) {
+      fiber.run(result)
+    })
+    return Fiber.yield()
+  },
+
+  /**
+   * Takes a function that ends by calling a traditional node callback where the
+   * first argument is an error and the second is the result and runs it using
+   * the current fiber. Returns the value of data.
+   *
+   * @param {Function} fn 
+   */
+
+  errDataToFiber(fn) {
+    const fiber = Fiber.current
+    fn(function (err, data) {
+      if (err) throw err
+      fiber.run(data)
+    })
+    return Fiber.yield()
   },
 
   /**
