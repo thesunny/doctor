@@ -1,4 +1,5 @@
 import Debug from "debug"
+import Fiber from "fibers"
 import invariant from "tiny-invariant"
 import { remote } from "webdriverio"
 
@@ -25,6 +26,15 @@ export default class Doctor {
     const browser = await this.browser()
     return await browser[method](...args)
   }
+
+  sleep(ms) {
+    const fiber = Fiber.current
+    setTimeout(function() {
+      fiber.run()
+    }, ms)
+    Fiber.yield()
+  }
+
 }
 
 const methods = {
