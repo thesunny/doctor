@@ -33,6 +33,7 @@ export default class Doctor {
       fiber.run()
     }, ms)
     Fiber.yield()
+    return ms
   }
 
 }

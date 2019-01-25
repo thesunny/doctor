@@ -36,6 +36,7 @@ describe("Should pass tests", () => {
   // })
 
   it("should sleep", () => {
-    doctor.sleep(1000)
+    const result = doctor.sleep(100)
+    expect(result).toEqual(100)
   })
 })
