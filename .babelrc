@@ -4,5 +4,6 @@
       "@babel/preset-env",
       { "targets": { "node": true }, "useBuiltIns": "usage" }
     ]
-  ]
+  ],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }

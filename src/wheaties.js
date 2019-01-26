@@ -1,6 +1,7 @@
 import Fiber from "fibers"
+import invariant from "tiny-invariant"
 
-const WholeWheat = {
+const Wheaties = {
   /**
    * Takes a function that we expect to run in a Fiber and adds the Fiber to
    * it. The method returns a Promise.
@@ -48,13 +49,13 @@ const WholeWheat = {
   /**
    * Takes a function that ends by calling a done(result) style callback and
    * runs it in the current fiber.
-   * 
-   * @param {Function} fn 
+   *
+   * @param {Function} fn
    */
 
   doneToFiber(fn) {
     const fiber = Fiber.current
-    fn(function (result) {
+    fn(function(result) {
       fiber.run(result)
     })
     return Fiber.yield()
@@ -65,12 +66,12 @@ const WholeWheat = {
    * first argument is an error and the second is the result and runs it using
    * the current fiber. Returns the value of data.
    *
-   * @param {Function} fn 
+   * @param {Function} fn
    */
 
   errDataToFiber(fn) {
     const fiber = Fiber.current
-    fn(function (err, data) {
+    fn(function(err, data) {
       if (err) throw err
       fiber.run(data)
     })
@@ -94,7 +95,28 @@ const WholeWheat = {
         throw error
       })
     return Fiber.yield()
-  }
+  },
+
+  /**
+   * Returns a function that you assign to a method on a Javacript `class`.
+   * Typically that property would named `proxy` and you'd assign it like:
+   *
+   * ```js
+   * proxy = Wheaties.proxyPromiseToFiber('propertyKeyOfObjectToProxy')
+   * ```
+   *
+   * @param {String} key
+   * @returns {Function}
+   */
+
+  proxyPromiseToFiber(fn) {
+    return function proxy(method, args) {
+      invariant(typeof fn === "function")
+      invariant(Array.isArray(args))
+      const object = fn(this)
+      return Wheaties.promiseToFiber(object[method](...args))
+    }
+  },
 }
 
-export default WholeWheat
+export default Wheaties

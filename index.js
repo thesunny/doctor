@@ -1,1 +1,1 @@
-export { default } from "./doctor"
+export { default } from "./src/doctor"
