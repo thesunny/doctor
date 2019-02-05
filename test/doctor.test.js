@@ -35,18 +35,14 @@ describe("Should pass tests", () => {
   it("should go to a specific URL", () => {
     doctor.url("https://www.slatejs.org/#/rich-text")
     const editorDiv = doctor.$("[data-slate-editor]")
-    const html = Wheaties.promiseToFiber(editorDiv.getHTML())
-    console.log({ html })
+    const html = editorDiv.html
+    console.log(html)
     doctor.sendKeys(editorDiv.elementId, "Hello World!")
   })
 
-  it.only("should get an Element using a selector", () => {
+  it("should get an Element using a selector", () => {
     doctor.url("https://www.google.ca/")
     const q = doctor.$("[name=q]")
-    q.setValue("hello world")
-    const value = q.getValue()
-    console.log({ value })
-    const button = doctor.$("[aria-label='Google Search']")
-    button.click()
+    q.sendKeys("hello world\uE007")
   })
 })

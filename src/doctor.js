@@ -1,5 +1,5 @@
 import Debug from "debug"
-import invariant from "tiny-invariant"
+import logger from "@wdio/logger"
 import { remote } from "webdriverio"
 
 import Element from "./element"
@@ -10,6 +10,7 @@ Debug.enable("doctor")
 
 export default class Doctor {
   get browser() {
+    logger.setLevel("webdriver", "silent")
     if (this.__browser__ == null) {
       this.__browser__ = Wheaties.promiseToFiber(
         remote({
@@ -32,12 +33,6 @@ export default class Doctor {
     })
   }
 
-  // proxy(method, args) {
-  //   invariant(typeof method === "string")
-  //   invariant(Array.isArray(args))
-  //   return Wheaties.promiseToFiber(this.browser[method](...args))
-  // }
-
   proxy = Wheaties.proxyPromiseToFiber(context => context.browser)
 
   sendKeys(elementId, values) {
@@ -46,12 +41,13 @@ export default class Doctor {
   }
 
   $(selector) {
-    return new Element(Wheaties.promiseToFiber(this.browser.$(selector)))
+    // return new Element(Wheaties.promiseToFiber(this.browser.$(selector)))
+    return new Element(this, this.proxy("$", [selector]))
   }
 
   $$(selector) {
     const elements = Wheaties.promiseToFiber(this.browser.$$(selector))
-    return elements.map(element => new Element(element))
+    return elements.map(element => new Element(this, element))
   }
 }
 

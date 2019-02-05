@@ -110,7 +110,7 @@ const Wheaties = {
    */
 
   proxyPromiseToFiber(fn) {
-    return function proxy(method, args) {
+    return function proxy(method, args=[]) {
       invariant(typeof fn === "function")
       invariant(Array.isArray(args))
       const object = fn(this)
