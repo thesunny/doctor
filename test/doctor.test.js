@@ -36,7 +36,6 @@ describe("Should pass tests", () => {
     doctor.url("https://www.slatejs.org/#/rich-text")
     const editorDiv = doctor.$("[data-slate-editor]")
     const html = editorDiv.html
-    console.log(html)
     doctor.sendKeys(editorDiv.elementId, "Hello World!")
   })
 

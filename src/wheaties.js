@@ -24,6 +24,10 @@ const Wheaties = {
     }
   },
 
+  async(fiberFn) {
+    Wheaties.promisify(fiberFn)
+  },
+
   /**
    * Takes an async function (i.e. a function that returns a Promise) and makes
    * it run using fibers instead. This function must be called within a
@@ -40,7 +44,8 @@ const Wheaties = {
           fiber.run(result)
         })
         .catch(error => {
-          throw error
+          fiber.throwInto(error)
+          // throw error
         })
       return Fiber.yield()
     }
@@ -72,7 +77,7 @@ const Wheaties = {
   errDataToFiber(fn) {
     const fiber = Fiber.current
     fn(function(err, data) {
-      if (err) throw err
+      if (err) return fiber.throwInto(err)
       fiber.run(data)
     })
     return Fiber.yield()
@@ -92,9 +97,13 @@ const Wheaties = {
         fiber.run(result)
       })
       .catch(error => {
-        throw error
+        fiber.throwInto(error)
       })
     return Fiber.yield()
+  },
+
+  await(asyncFn) {
+    return Wheaties.promiseToFiber(asyncFn)
   },
 
   /**
@@ -110,7 +119,7 @@ const Wheaties = {
    */
 
   proxyPromiseToFiber(fn) {
-    return function proxy(method, args=[]) {
+    return function proxy(method, args = []) {
       invariant(typeof fn === "function")
       invariant(Array.isArray(args))
       const object = fn(this)
