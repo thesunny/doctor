@@ -16,10 +16,6 @@ describe("Should pass tests", () => {
     doctor = new Doctor()
   })
 
-  afterAll(() => {
-    // doctor.teardown()
-  })
-
   it("should sleep", () => {
     const result1 = doctor.sleep(10)
     expect(result1).toEqual(10)
@@ -28,8 +24,8 @@ describe("Should pass tests", () => {
   })
 
   it("should access the browser property", () => {
-    const browser = doctor.browser
-    expect(browser.sessionId).toEqual(expect.any(String))
+    const client = doctor.client
+    expect(client.sessionId).toEqual(expect.any(String))
   })
 
   it("should go to a specific URL", () => {

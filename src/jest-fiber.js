@@ -27,4 +27,3 @@ global.beforeAll = promisifyFnArgs(original.beforeAll, 0)
 global.afterAll = promisifyFnArgs(original.afterAll, 0)
 global.beforeEach = promisifyFnArgs(original.beforeEach, 0)
 global.afterEach = promisifyFnArgs(original.afterEach, 0)
-
