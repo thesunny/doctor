@@ -1,9 +1,7 @@
 import Debug from "debug"
-import logger from "@wdio/logger"
-import { remote } from "webdriverio"
 
 import Element from "./element"
-import Wheaties from "./wheaties"
+import Fibered from "./fibered"
 import Session from "./session"
 
 const debug = Debug("doctor")
@@ -14,29 +12,14 @@ export default class Doctor {
     const session = new Session()
     this.client = session.client
   }
-  // get browser() {
-  //   logger.setLevel("webdriver", "silent")
-  //   if (this.__browser__ == null) {
-  //     this.__browser__ = Wheaties.promiseToFiber(
-  //       remote({
-  //         logLevel: "error",
-  //         path: "/",
-  //         capabilities: {
-  //           browserName: "chrome",
-  //         },
-  //       })
-  //     )
-  //   }
-  //   return this.__browser__
-  // }
 
   sleep(ms) {
-    return Wheaties.doneToFiber(done => {
+    return Fibered.doneToFiber(done => {
       setTimeout(() => done(ms), ms)
     })
   }
 
-  proxy = Wheaties.proxyPromiseToFiber(context => context.client)
+  proxy = Fibered.proxyPromiseToFiber(context => context.client)
 
   sendKeys(elementId, values) {
     if (!Array.isArray(values)) values = [values]
@@ -44,12 +27,11 @@ export default class Doctor {
   }
 
   $(selector) {
-    // return new Element(Wheaties.promiseToFiber(this.browser.$(selector)))
     return new Element(this, this.proxy("$", [selector]))
   }
 
   $$(selector) {
-    const elements = Wheaties.promiseToFiber(this.client.$$(selector))
+    const elements = this.proxy("$$", [selector])
     return elements.map(element => new Element(this, element))
   }
 }

@@ -1,13 +1,5 @@
-import Debug from "debug"
-import Fiber from "fibers"
-import invariant from "tiny-invariant"
-
 import "../src/jest-fiber"
 import Doctor from "../index"
-import Wheaties from "../src/wheaties"
-
-const debug = Debug("doctor:test")
-Debug.enable("doctor:test")
 
 describe("Should pass tests", () => {
   let doctor

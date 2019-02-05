@@ -1,4 +1,4 @@
-import Wheaties from "./wheaties"
+import Fibered from "./fibered"
 import fs from "fs"
 import invariant from "tiny-invariant"
 import logger from "@wdio/logger"
@@ -14,9 +14,9 @@ let sessionCount = 0 // We start at 0 so the first sessionId is 1
 const SESSION_DIR = nodepath.join(__dirname, "temp")
 
 function createClient() {
-  return Wheaties.await(
+  return Fibered.await(
     remote({
-      logLevel: "error",
+      logLevel: "silent",
       hostname: "127.0.0.1",
       path: "/wd/hub",
       capabilities: {
@@ -63,7 +63,7 @@ function reconnectClient(count) {
   let client
   try {
     client = attach(config)
-    const handles = Wheaties.await(client.getWindowHandles())
+    const handles = Fibered.await(client.getWindowHandles())
     return client
   } catch (error) {
     return null

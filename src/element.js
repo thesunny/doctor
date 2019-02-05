@@ -1,6 +1,5 @@
 import invariant from "tiny-invariant"
-import Wheaties from "./wheaties"
-import Doctof from "./doctor"
+import Wheaties from "./fibered"
 import Doctor from "./doctor"
 
 export default class Element {
@@ -16,10 +15,6 @@ export default class Element {
     return this.el.elementId
   }
 
-  get html() {
-    return this.proxy("getHTML")
-  }
-
   sendKeys(text) {
     invariant(typeof text === "string")
     this.doctor.sendKeys(this.elementId, text)
@@ -27,15 +22,14 @@ export default class Element {
 }
 
 const methods = {
-  click: true,
-  getHTML: true,
-  getValue: true,
-  setValue: true,
-  waitForExist: true,
+  click: "click",
+  getHTML: "getHTML",
+  getValue: "getValue",
+  setValue: "setValue",
+  waitForExist: "waitForExist",
 }
 
 Object.entries(methods).forEach(([thisKey, remoteKey]) => {
-  if (remoteKey === true) remoteKey = thisKey
   Element.prototype[thisKey] = function(...args) {
     return this.proxy(remoteKey, args)
   }

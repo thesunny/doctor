@@ -1,5 +1,5 @@
 import invariant from "tiny-invariant"
-import Wheaties from "./wheaties"
+import Wheaties from "./fibered"
 
 function promisifyFnArgs(fn, index) {
   if (fn.promisifiedFnArgs) return fn
